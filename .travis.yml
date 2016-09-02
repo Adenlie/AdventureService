@@ -1,0 +1,4 @@
+notifications:
+  slack:
+    rooms:
+      - adenlie:W3ZYUlAA7ulPK1HshrzvD119#build

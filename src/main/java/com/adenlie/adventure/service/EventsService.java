@@ -27,6 +27,7 @@ public class EventsService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return asList(new Event("Mystic Munnar",startDate,endDate,4,2000.00));
+        return asList(new Event("Mystic Munnar", startDate, endDate, 4, 2000.00));
+
     }
 }

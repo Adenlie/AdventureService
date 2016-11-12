@@ -9,12 +9,12 @@ public class Event {
     private Integer duration;
     private Double price;
 
-    public Event(String s, Date date, Date date1,Integer i,Double v) {
-        eventName=s;
-        startDate=date;
-        endDate=date1;
-        duration=i;
-        price=v;
+    public Event(String s, Date date, Date date1, Integer i, Double v) {
+        eventName = s;
+        startDate = date;
+        endDate = date1;
+        duration = i;
+        price = v;
     }
 
 

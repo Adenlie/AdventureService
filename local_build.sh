@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-gradle clean build test
+./gradlew clean build test

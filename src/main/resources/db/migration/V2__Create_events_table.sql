@@ -3,6 +3,6 @@ CREATE TABLE events (
     name VARCHAR(50) NOT NULL,
     start_date DATE,
     end_date DATE,
-    duration INTEGER
+    duration INTEGER,
     cost NUMERIC
 );

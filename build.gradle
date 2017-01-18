@@ -1,9 +1,13 @@
 buildscript {
     repositories {
-        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE'
+        classpath 'gradle.plugin.com.boxfuse.client:flyway-release:4.0.3'
+        classpath group: 'org.postgresql', name: 'postgresql', version: '9.4.1208.jre7'
     }
 }
 
@@ -11,6 +15,15 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'org.flywaydb.flyway'
+
+apply from: 'configuration.gradle'
+
+idea {
+    module {
+        sourceDirs += file('generated/')
+    }
+}
 
 jar {
     baseName = 'adenlie-adventure-service'
@@ -23,6 +36,15 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+ext {
+    generatedSourcesDir = file("${buildDir}/generated-sources")
+    querydslVersion = "3.6.3"
+}
+
+configurations {
+    querydslapt
+}
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -37,16 +59,12 @@ dependencies {
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
     testCompile(group: 'org.mockito', name: 'mockito-all', version: '1.9.0')
 
-    compile  "com.mysema.querydsl:querydsl-core:${querydslVersion}"
-    compile  "com.mysema.querydsl:querydsl-jpa:${querydslVersion}"
-    querydslapt  "com.mysema.querydsl:querydsl-apt:${querydslVersion}"
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile "com.mysema.querydsl:querydsl-core:$querydslVersion"
+    compile "com.mysema.querydsl:querydsl-jpa:$querydslVersion"
+    querydslapt "com.mysema.querydsl:querydsl-apt:$querydslVersion"
 }
 
-
-ext {
-    generatedSourcesDir = file("${buildDir}/generated-sources")
-    querydslVersion    = "3.4.2"
-}
 sourceSets {
     main {
         java {
@@ -55,9 +73,24 @@ sourceSets {
         }
     }
 }
-configurations {
-    querydslapt
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
 }
+
+flyway {
+    url = "jdbc:postgresql://localhost:5432/${rootProject.config.adventure_db_url}"
+    locations = ["filesystem:$project.projectDir/src/main/resources/db"]
+    user = 'postgres'
+    password = 'adminadventure'
+    driver = 'org.postgresql.Driver'
+    schemas = ['public']
+    table = 'flyway_schema_version'
+    baselineOnMigrate = true
+    validateOnMigrate = false
+    outOfOrder = true
+}
+
 task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
     source = sourceSets.main.java
     classpath = configurations.compile + configurations.querydslapt
@@ -67,7 +100,6 @@ task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates
     ]
     destinationDir = generatedSourcesDir
 }
-
 
 compileJava {
     doFirst {

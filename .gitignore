@@ -28,3 +28,6 @@ target/
 # IntelliJ
 .idea
 *.iml
+
+# Java
+classes/

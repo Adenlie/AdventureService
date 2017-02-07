@@ -2,6 +2,7 @@ package com.adenlie.adventure.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,12 +13,14 @@ import java.util.Date;
 @Table(name = "events")
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+
 public class Event {
     @Id
     private String eventId;
-    private String eventName;
-    private Date startDate;
-    private Date endDate;
     private Integer duration;
+    private Date endDate;
+    private String eventName;
     private Double price;
+    private Date startDate;
 }

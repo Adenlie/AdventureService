@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
 function start {
+    dropdb adventure && craetedb adventure
     ./gradlew build && java -jar build/libs/adenlie-adventure-service-0.1.0.jar & echo "$!" > tmp/adventure-service.lock
 }
 
 function stop {
-    echo "Stopping adventure service..."
     if [ -f "tmp/promotion-core.lock" ]; then
+        echo "Stopping adventure service..."
         kill `cat "tmp/adventure-service.lock"`
         rm "tmp/adventure-service.lock"
     else
@@ -21,7 +22,7 @@ function restart {
 }
 
 function status {
-    id=`jps | grep adventure-service | grep -v grep | grep -v bash`
+    id=`jps | grep adventure-service | grep -v grep | grep -v zsh`
     RET=$?
     if [ $RET -eq 0 ]; then
         echo "$1 Service is running..."

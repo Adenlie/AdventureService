@@ -15,10 +15,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/events")
 @ResponseBody
 public class EventsController {
-    @Autowired
-    private EventsService eventsService;
+    private final EventsService eventsService;
 
-    @RequestMapping(value = "/all.json", method = GET)
+    @Autowired
+    public EventsController(EventsService eventsService) {
+        this.eventsService = eventsService;
+    }
+
+    @RequestMapping(method = GET)
+    @ResponseBody
     public List<Event> getEvents() {
         return eventsService.getEvents();
     }

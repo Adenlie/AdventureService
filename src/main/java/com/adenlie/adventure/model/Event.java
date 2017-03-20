@@ -17,7 +17,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Event {
     @Id
     private String eventId;

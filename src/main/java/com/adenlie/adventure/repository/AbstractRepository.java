@@ -27,8 +27,9 @@ public abstract class AbstractRepository {
         return from(model).list(model);
     }
 
-    public <T> void save(T object) {
+    public <T> T save(T object) {
         entityManager.persist(object);
+        return object;
     }
 
     protected void upsert(Object key, Object obj) {
